@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Audio Pokemon Ruby</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #DC143C, #8B0000);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .generator {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+        button {
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            color: #8B0000;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: linear-gradient(145deg, #FFA500, #FF8C00);
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 Generador de Audio Pokemon Ruby</h1>
+    <div class="generator">
+        <p>Haz clic en los botones para generar y descargar archivos de audio:</p>
+        <button onclick="generateAndDownload('littleroot')">🏠 Littleroot Town</button>
+        <button onclick="generateAndDownload('route101')">🛤️ Route 101</button>
+        <button onclick="generateAndDownload('petalburg')">🏢 Petalburg City</button>
+        <button onclick="generateAndDownload('oldale')">🏘️ Oldale Town</button>
+        
+        <div style="margin-top: 20px; font-size: 0.9em;">
+            <p>⚡ Los archivos se generarán como tonos 8-bit estilo GBA</p>
+            <p>📁 Guárdalos en la carpeta /public/audio/ de tu proyecto</p>
+        </div>
+    </div>
+
+    <script>
+        function generateAudio(trackName) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const duration = 10; // 10 segundos de audio
+            const sampleRate = audioContext.sampleRate;
+            const buffer = audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+            const data = buffer.getChannelData(0);
+
+            // Melodías diferentes para cada track
+            const melodies = {
+                littleroot: [262, 330, 392, 262, 330, 392, 440, 392, 330, 262],
+                route101: [294, 370, 440, 370, 294, 370, 440, 523, 440, 370],
+                petalburg: [330, 415, 494, 415, 330, 415, 494, 588, 494, 415],
+                oldale: [247, 311, 370, 311, 247, 311, 370, 415, 370, 311]
+            };
+
+            const melody = melodies[trackName] || melodies.littleroot;
+            const noteLength = (duration * sampleRate) / melody.length;
+
+            // Generar audio
+            for (let i = 0; i < data.length; i++) {
+                const noteIndex = Math.floor(i / noteLength);
+                const frequency = melody[noteIndex % melody.length];
+                const time = i / sampleRate;
+                
+                // Onda cuadrada para sonido retro
+                data[i] = Math.sign(Math.sin(2 * Math.PI * frequency * time)) * 0.1;
+                
+                // Envelope para suavizar
+                const envelope = Math.max(0, 1 - (i % noteLength) / noteLength * 0.5);
+                data[i] *= envelope;
+            }
+
+            return buffer;
+        }
+
+        function bufferToWav(buffer) {
+            const length = buffer.length;
+            const arrayBuffer = new ArrayBuffer(44 + length * 2);
+            const view = new DataView(arrayBuffer);
+
+            // WAV header
+            const writeString = (offset, string) => {
+                for (let i = 0; i < string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            };
+
+            writeString(0, 'RIFF');
+            view.setUint32(4, 36 + length * 2, true);
+            writeString(8, 'WAVE');
+            writeString(12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true);
+            view.setUint32(24, buffer.sampleRate, true);
+            view.setUint32(28, buffer.sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            writeString(36, 'data');
+            view.setUint32(40, length * 2, true);
+
+            // Datos de audio
+            const channelData = buffer.getChannelData(0);
+            let offset = 44;
+            for (let i = 0; i < length; i++) {
+                const sample = Math.max(-1, Math.min(1, channelData[i]));
+                view.setInt16(offset, sample * 0x7FFF, true);
+                offset += 2;
+            }
+
+            return arrayBuffer;
+        }
+
+        function generateAndDownload(trackName) {
+            console.log(`Generando ${trackName}...`);
+            
+            try {
+                const audioBuffer = generateAudio(trackName);
+                const wavBuffer = bufferToWav(audioBuffer);
+                const blob = new Blob([wavBuffer], { type: 'audio/wav' });
+                
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${trackName}-town.wav`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                alert(`✅ ${trackName} generado y descargado!`);
+            } catch (error) {
+                alert(`❌ Error generando ${trackName}: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>

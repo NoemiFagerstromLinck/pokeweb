@@ -1,0 +1,33 @@
+{
+  "name": "pokemon-search-app",
+  "version": "2.0.0",
+  "description": "Vue.js Pokemon search application with UI libraries comparison and SSR documentation",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "axios": "^1.13.2",
+    "firebase": "^12.6.0",
+    "pinia": "^2.3.1",
+    "vue": "^3.3.0",
+    "vue-router": "^4.6.3",
+    "vuetify": "^3.10.11"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.0",
+    "vite": "^4.3.0"
+  },
+  "keywords": [
+    "vue",
+    "pokemon",
+    "vuetify"
+  ],
+  "author": "Student - Bootcamp Frontend UNAB",
+  "license": "MIT",
+  "readme": "Ver README.md y RESUMEN_EJECUTIVO.md para documentación completa"
+}

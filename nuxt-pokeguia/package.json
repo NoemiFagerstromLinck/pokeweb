@@ -1,0 +1,20 @@
+{
+  "name": "nuxt-pokeguia",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "nuxt": "^3.11.0",
+    "vuetify": "^3.6.0",
+    "@pinia/nuxt": "^0.5.0",
+    "pinia": "^2.1.7",
+    "axios": "^1.7.0",
+    "sass": "^1.69.0",
+    "sass-loader": "^13.3.2"
+  }
+}
