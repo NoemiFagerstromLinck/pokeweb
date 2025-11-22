@@ -1,4 +1,16 @@
 <template>
+<<<<<<< HEAD
+  <v-app>
+    <v-app-bar color="deep-purple-darken-2" dark app>
+      <v-toolbar-title class="d-flex align-center">
+        <v-icon left>mdi-star</v-icon>
+        Favoritos
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn to="/" variant="outlined" color="yellow">
+        <v-icon left>mdi-arrow-left</v-icon> Volver
+      </v-btn>
+=======
   <v-app class="pixel-font">
     <v-app-bar class="gba-app-bar" flat>
       <v-toolbar-title class="d-flex align-center gba-title">
@@ -7,6 +19,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn to="/" variant="outlined" color="yellow" class="pixel-font"><v-icon left>mdi-arrow-left</v-icon> Volver</v-btn>
+>>>>>>> b3fc6f7 (init: proyecto limpio para deploy)
     </v-app-bar>
     <v-main>
       <v-container class="py-6">
@@ -37,7 +50,11 @@
             >
               <div class="d-flex align-center mb-2">
                 <v-avatar size="64" class="mr-3">
+<<<<<<< HEAD
+                  <v-img :src="p.sprites?.other?.['official-artwork']?.front_default || p.sprites?.front_default"></v-img>
+=======
                   <v-img :src="`/images/pokemon-${p.id}.png`"></v-img>
+>>>>>>> b3fc6f7 (init: proyecto limpio para deploy)
                 </v-avatar>
                 <div>
                   <h4 class="text-subtitle-1 mb-1">{{ p.name.toUpperCase() }} <v-chip size="x-small" color="red">#{{ p.id }}</v-chip></h4>
@@ -135,6 +152,8 @@ export default {
 }
 </script>
 <style scoped>
+<<<<<<< HEAD
+=======
 .pixel-font, .gba-title-text, .gba-title-pixel, .v-btn, .v-card-title, .v-card-text, .v-chip, .v-toolbar-title, .text-caption, .text-subtitle-1, .text-subtitle-2, .text-h5, .text-h6, .text-h4, .text-h3, .text-h2, .text-h1 {
   font-family: 'Press Start 2P', monospace !important;
   letter-spacing: 0.5px;
@@ -152,6 +171,7 @@ body::before, .v-application::before {
   background: repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 8px);
   z-index: 0;
 }
+>>>>>>> b3fc6f7 (init: proyecto limpio para deploy)
 .stats-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(120px,1fr)); gap:8px; }
 .stat-item { background:rgba(255,255,255,0.4); padding:6px 8px; border-radius:8px; }
 .stat-name { font-size:11px; font-weight:600; text-transform:capitalize; }

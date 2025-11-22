@@ -1,33 +1,30 @@
 <template>
-  <v-app class="pixel-font">
-    <img src="/images/pikachu-pixel.png" alt="Pikachu travieso" class="pikachu-mascot" />
-    <v-app-bar class="gba-app-bar" flat>
-      <!-- Pokeball pixel PNG solo dentro del título -->
-      <v-toolbar-title class="d-flex align-center gba-title">
-        <img src="/images/pokeball-pixel.png" alt="Pokeball pixel" style="height: 2.2em; margin-right: 0.5em; vertical-align: middle;" />
-        <span class="gba-title-text gba-title-pixel">Pokeguía</span>
-        <img src="/images/pikachu-pixel.png" alt="Pikachu pixel" class="pixelart-deco pixelart-deco-right" />
-        <v-chip v-if="dominantType" size="small" class="ml-2 text-capitalize gba-type-chip" :style="{backgroundColor: dominantColor, color:'#fff', fontFamily: 'monospace'}">{{ dominantType }}</v-chip>
+  <v-app>
+    <v-app-bar :color="barColor" dark app>
+      <v-toolbar-title class="d-flex align-center">
+        <v-icon left>mdi-pokeball</v-icon>
+        Pokeguía
+        <v-chip v-if="dominantType" size="small" class="ml-2 text-capitalize" :style="{backgroundColor: dominantColor, color:'#fff'}">{{ dominantType }}</v-chip>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn to="/explorar" class="gba-menu-btn">
+      <v-btn to="/explorar" variant="text" size="small" class="mr-2">
         <v-icon left size="small">mdi-grid</v-icon>
         <span class="d-none d-sm-inline">Explorar</span>
       </v-btn>
-      <v-btn to="/favoritos" class="gba-menu-btn">
+      <v-btn to="/favoritos" variant="text" size="small" class="mr-2">
         <v-icon left size="small">mdi-heart</v-icon>
         <span class="d-none d-sm-inline">Favoritos</span>
       </v-btn>
-      <v-btn to="/equipo" class="gba-menu-btn">
+      <v-btn to="/equipo" variant="text" size="small" class="mr-2">
         <v-icon left size="small">mdi-account-group</v-icon>
         <span class="d-none d-sm-inline">Equipo</span>
       </v-btn>
-      <v-btn to="/comparar" class="gba-menu-btn">
+      <v-btn to="/comparar" variant="text" size="small" class="mr-2">
         <v-icon left size="small">mdi-compare</v-icon>
         <span class="d-none d-sm-inline">Comparar</span>
       </v-btn>
       <ThemeToggle class="mr-2" />
-      <v-btn v-if="pokemon" size="small" class="gba-fav-btn" @click="toggleFavorite">
+      <v-btn v-if="pokemon" size="small" variant="outlined" color="yellow" @click="toggleFavorite">
         <v-icon left>{{ isFav ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
         {{ isFav ? 'Favorito' : 'Marcar' }}
       </v-btn>
@@ -35,15 +32,16 @@
 
     <v-main>
       <v-container fluid class="pa-6">
+        <FilterPanel @update:filters="applyFilters" />
         <v-row justify="center">
-          <v-col cols="12">
-            <v-card elevation="12" class="gba-main-card animate-pop" style="max-width:1200px;margin:auto;">
-              <v-card-title class="gba-main-title">
-                <v-icon left size="large" color="#fff">mdi-magnify</v-icon>
-                <span class="gba-main-title-text gba-title-pixel">Buscador de Pokémon</span>
+          <v-col cols="12" md="8" lg="6">
+            <v-card elevation="3">
+              <v-card-title class="text-h4 text-center py-5 bg-red-darken-1 text-white">
+                <v-icon left size="large">mdi-magnify</v-icon>
+                Buscador de Pokémon
               </v-card-title>
-              <v-card-text class="pa-8 gba-main-content">
-                <FilterPanel @update:filters="applyFilters" class="mb-6" />
+              
+              <v-card-text class="pa-6">
                 <v-autocomplete
                   v-model="query"
                   :items="filteredSuggestions"
@@ -59,10 +57,10 @@
                   no-data-text="No hay sugerencias"
                 ></v-autocomplete>
 
-                <div class="text-center my-6">
+                <div class="text-center">
                   <v-btn
-                    class="gba-search-btn animate-pop"
-                    size="x-large"
+                    color="red darken-1"
+                    size="large"
                     @click="searchPokemon"
                     :loading="loading"
                     prepend-icon="mdi-pokeball"
@@ -71,14 +69,14 @@
                   </v-btn>
                 </div>
 
-                <v-card v-if="!pokemon && !loading" class="gba-suggestions-card animate-fade-in">
+                <v-card v-if="!pokemon && !loading" variant="tonal" color="blue-grey-lighten-5" class="mt-6">
                   <v-card-text>
-                    <p class="gba-suggestions-title">
-                      <v-icon left color="#fff">mdi-lightbulb-outline</v-icon>
+                    <p class="text-subtitle-1 font-weight-bold mb-3">
+                      <v-icon left color="info">mdi-lightbulb-outline</v-icon>
                       Sugerencias:
                     </p>
                     <div v-if="filterLoading" class="text-center py-2">
-                      <v-progress-circular indeterminate color="#1976D2" />
+                      <v-progress-circular indeterminate color="red" />
                     </div>
                     <v-chip-group v-else>
                       <v-chip
@@ -86,8 +84,9 @@
                         :key="suggestion"
                         @click="query = suggestion; searchPokemon()"
                         @contextmenu.prevent="showQuickView(suggestion)"
-                        class="ma-2 gba-suggestion-chip animate-pop"
-                        :style="{fontFamily: 'monospace'}"
+                        color="red"
+                        variant="outlined"
+                        class="ma-1 suggestion-chip"
                       >
                         {{ suggestion }}
                       </v-chip>
@@ -128,7 +127,7 @@
                   <!-- Columna izquierda: Imagen y acciones -->
                   <v-col cols="12" md="5" class="text-center">
                     <v-avatar size="220" class="mb-3 pokemon-avatar elevation-8">
-                      <v-img :src="`/images/pokemon-${pokemon.id}.png`" :alt="pokemon.name" :lazy-src="placeholderImg"></v-img>
+                      <v-img :src="photoUrl" :alt="pokemon.name" :lazy-src="placeholderImg"></v-img>
                     </v-avatar>
                     
                     <div class="d-flex justify-center gap-2 mb-4 flex-wrap">
@@ -192,7 +191,7 @@
                               :style="{ cursor: evo.name !== pokemon.name ? 'pointer' : 'default', opacity: evo.name === pokemon.name ? 1 : 0.6 }"
                             >
                               <v-avatar size="60" class="mb-1">
-                                <v-img :src="`/images/pokemon-${evo.id}.png`" />
+                                <v-img :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png`" />
                               </v-avatar>
                               <div class="text-caption font-weight-bold text-capitalize">{{ evo.name }}</div>
                               <v-chip size="x-small" color="grey" variant="flat" class="mt-1">#{{ evo.id }}</v-chip>
@@ -341,7 +340,7 @@
             </v-card-title>
             <v-card-text class="text-center pa-4">
               <v-avatar size="120" class="mb-3">
-                <v-img :src="`/images/pokemon-${quickViewPokemon.id}.png`" :alt="quickViewPokemon.name"></v-img>
+                <v-img :src="quickViewPokemon.sprite" :alt="quickViewPokemon.name"></v-img>
               </v-avatar>
               <div class="d-flex justify-center gap-2 flex-wrap">
                 <v-chip v-for="type in quickViewPokemon.types" :key="type" :style="{ backgroundColor: TYPE_COLORS[type] || '#999', color: '#fff' }" size="small">
@@ -436,9 +435,9 @@ export default {
     barColor() {
       return this.dominantColor || 'red-darken-2'
     },
-    // photoUrl is now unused for main image, but may be used elsewhere
     photoUrl() {
-      return `/images/pokemon-${this.pokemon?.id}.png`;
+      return this.pokemon?.sprites?.other?.['official-artwork']?.front_default || 
+             this.pokemon?.sprites?.front_default
     },
     placeholderImg() {
       return 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="%23ddd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="16" fill="%23666">Loading</text></svg>'
@@ -475,10 +474,6 @@ export default {
     },
     applyFilters(f) {
       this.filters = f
-      if (this.pokemon) {
-        this.pokemon = null;
-        this.query = '';
-      }
       this.filterSuggestions(this.query)
     },
     async filterByAdvancedAsync(list) {
@@ -692,37 +687,6 @@ export default {
 </script>
 
 <style scoped>
-@font-face {
-  font-family: 'VT323';
-  src: url('/fonts/VT323-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'PressStart2P';
-  src: url('/fonts/PressStart2P-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-.gba-title-pixel {
-  font-family: 'PressStart2P', 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif !important;
-  letter-spacing: 2px;
-  font-size: 2.1rem;
-}
-.pixelart-deco {
-  position: absolute;
-  top: 0;
-  width: 48px;
-  height: 48px;
-  image-rendering: pixelated;
-  z-index: 10;
-}
-.pixelart-deco-left {
-  left: 12px;
-}
-.pixelart-deco-right {
-  right: 12px;
-}
 .bg-gradient {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -767,166 +731,13 @@ export default {
   transform: scale(1.1) rotate(5deg);
 }
 
-.gba-app-bar {
-  background: linear-gradient(180deg, #b97fc9 0%, #a16ae8 100%) !important;
-  border-bottom: 6px solid #2a4e7e;
-  box-shadow: 0 4px 24px #2a4e7e33;
-}
-.gba-title {
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
-  font-weight: 700;
-  letter-spacing: 2px;
-  font-size: 2.1rem;
-}
-.gba-title-text {
-  color: #fff;
-  text-shadow: 1px 2px 0 #2a4e7e, 0 0 8px #fff;
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
-}
-.gba-type-chip {
-  border-radius: 4px;
-  font-weight: bold;
-  box-shadow: 0 2px 8px #2a4e7e33;
-  border: 2px solid #2a4e7e;
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
-}
-.gba-menu-btn {
-  background: #2a4e7e;
-  color: #fff !important;
-  border-radius: 0px;
-  margin-left: 6px;
-  margin-right: 6px;
-  font-weight: 700;
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 0 #000;
-  transition: background 0.2s, box-shadow 0.2s;
-}
-.gba-menu-btn:hover {
-  background: #fff !important;
-  color: #2a4e7e !important;
-  box-shadow: 0 2px 8px #2a4e7e66;
-}
-.gba-fav-btn {
-  background: #fff;
-  color: #b97fc9 !important;
-  border-radius: 0px;
-  font-weight: 700;
-  margin-left: 10px;
-  border: 2px solid #b97fc9;
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
-}
-.gba-filters-card {
-  background: linear-gradient(120deg, #e0ffe0 60%, #b2f2e9 100%);
-  border-radius: 8px;
-  box-shadow: 0 4px 24px #2a4e7e22;
-  margin-bottom: 32px;
-  padding: 18px 12px 8px 12px;
-  border: 4px solid #2a4e7e;
-}
-.gba-main-card {
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 8px 32px #2a4e7e22;
-  border: 4px solid #2a4e7e;
-}
-.gba-main-title {
-  background: linear-gradient(90deg, #b97fc9 60%, #a16ae8 100%);
-  color: #fff;
-  border-radius: 8px 8px 0 0;
-  box-shadow: 0 2px 12px #2a4e7e33;
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
-  font-size: 2rem;
-  padding: 18px 0 18px 0;
-  text-align: left;
-}
-.gba-main-title-text {
-  color: #fff;
-  text-shadow: 1px 2px 0 #2a4e7e, 0 0 8px #fff;
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
-}
-.gba-main-content {
-  background: #e0ffe0;
-  border-radius: 0 0 8px 8px;
-  border-top: 2px solid #b97fc9;
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
-}
-.gba-search-btn {
-  background: #2a4e7e;
-  color: #fff !important;
-  border-radius: 0px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
-  border: 2px solid #b97fc9;
-  box-shadow: 0 2px 0 #000;
-  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
-}
-.gba-search-btn:hover {
-  background: #b97fc9 !important;
-  color: #fff !important;
-  transform: scale(1.07);
-  box-shadow: 0 4px 24px #b97fc966;
-}
-.gba-suggestions-card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px #2a4e7e33;
-  margin-top: 32px;
-  border: 4px solid #2a4e7e;
-}
-.gba-suggestions-title {
-  color: #b97fc9;
-  letter-spacing: 1px;
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
-  font-size: 1.3rem;
-  margin-bottom: 12px;
-}
-.gba-suggestion-chip {
-  background: #e0ffe0 !important;
-  color: #2a4e7e !important;
-  border: 2px solid #b97fc9 !important;
-  border-radius: 0px !important;
-  font-weight: bold;
-  font-size: 1.1rem;
-  box-shadow: 0 2px 0 #000;
-  transition: background 0.2s, color 0.2s, transform 0.15s, box-shadow 0.2s;
+.suggestion-chip {
+  transition: all 0.2s ease;
   cursor: pointer;
-  font-family: 'VT323', 'Fira Mono', 'monospace', Arial, sans-serif;
 }
-.gba-suggestion-chip:hover {
-  background: #b97fc9 !important;
-  color: #fff !important;
-  transform: scale(1.08);
-  box-shadow: 0 4px 16px #b97fc966;
-}
-.animate-pop {
-  animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-.animate-fade-in {
-  animation: fadeIn 0.7s cubic-bezier(0.4,0,0.2,1);
-}
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.animate-pop {
-  animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-.animate-fade-in {
-  animation: fadeIn 0.7s cubic-bezier(0.4,0,0.2,1);
-}
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.suggestion-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .shimmer-card {
@@ -999,53 +810,6 @@ export default {
 .evolution-current {
   border: 3px solid var(--v-theme-primary);
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-}
-
-
-
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-html, body, #app, .v-application {
-  font-family: 'Press Start 2P', monospace !important;
-  font-size: 15px !important;
-  letter-spacing: 0.5px !important;
-}
-
-.pixel-font, .gba-title-text, .gba-main-title-text, .gba-suggestions-title, .gba-suggestion-chip, .gba-type-chip, .gba-main-title, .gba-main-title-text, .gba-title-pixel, .v-btn, .v-chip, .v-card-title, .v-card-text, .v-autocomplete, .v-input, .v-label, .v-list-item-title, .v-list-item-content, .v-toolbar-title, .v-alert-title, .v-alert, .v-avatar, .v-progress-linear, .v-progress-circular, .v-icon, .text-h5, .text-center, .text-caption, .text-body-2, .font-weight-bold, .font-weight-black, .text-subtitle-2, .text-capitalize, .text-body-2, .text-h5, .text-h6, .text-h4, .text-h3, .text-h2, .text-h1 {
-  font-family: 'Press Start 2P', monospace !important;
-  letter-spacing: 0.5px !important;
-}
-
-@font-face {
-  font-family: 'Press Start 2P';
-  src: url('./fonts/PressStart2P-Regular.ttf') format('truetype');
-  font-display: swap;
-}
-
-/* Pikachu mascot animation */
-.pikachu-mascot {
-  position: fixed;
-  left: 0;
-  bottom: 40px;
-  width: 64px;
-  height: 64px;
-  z-index: 9999;
-  pointer-events: none;
-  animation: pikachu-walk 12s linear infinite;
-}
-
-@keyframes pikachu-walk {
-  0% { left: 0; bottom: 40px; transform: scaleX(1) rotate(-10deg); }
-  10% { left: 20vw; bottom: 60px; transform: scaleX(1) rotate(0deg); }
-  20% { left: 40vw; bottom: 80px; transform: scaleX(1) rotate(10deg); }
-  30% { left: 60vw; bottom: 100px; transform: scaleX(1) rotate(0deg); }
-  40% { left: 80vw; bottom: 120px; transform: scaleX(-1) rotate(-10deg); }
-  50% { left: 100vw; bottom: 140px; transform: scaleX(-1) rotate(0deg); }
-  60% { left: 80vw; bottom: 120px; transform: scaleX(-1) rotate(10deg); }
-  70% { left: 60vw; bottom: 100px; transform: scaleX(-1) rotate(0deg); }
-  80% { left: 40vw; bottom: 80px; transform: scaleX(1) rotate(-10deg); }
-  90% { left: 20vw; bottom: 60px; transform: scaleX(1) rotate(0deg); }
-  100% { left: 0; bottom: 40px; transform: scaleX(1) rotate(-10deg); }
 }
 
 /* High-contrast helpers */

@@ -2,9 +2,9 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
-  // Set base to your repository name for GitHub Pages
-  // Example site URL: https://NoemiFagerstromLinck.github.io/Bootcamp-frontend-unab/
-  base: '/Bootcamp-frontend-unab/',
+  // Base path for GitHub Pages deployment of Pokeweb
+  // Example: https://NoemiFagerstromLinck.github.io/Pokeweb/
+  base: '/Pokeweb/',
   plugins: [vue()],
   resolve: {
     alias: {

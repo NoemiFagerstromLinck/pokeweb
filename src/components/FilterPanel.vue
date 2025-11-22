@@ -43,6 +43,7 @@
     </v-card-text>
   </v-card>
 </template>
+
 <script>
 import { usePokemonStore } from '../store/pokemon'
 export default {
@@ -99,3 +100,4 @@ export default {
   }
 }
 </script>
+

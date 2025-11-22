@@ -1,4 +1,75 @@
 <template>
+<<<<<<< HEAD
+  <v-container>
+    <v-card class="mb-4" variant="outlined" rounded="xl">
+      <v-card-title class="text-subtitle-1 d-flex align-center">
+        <v-icon color="indigo" start>mdi-account-group</v-icon>
+        Equipo ({{ store.teamCount }}/6)
+        <v-spacer />
+        <v-btn size="x-small" :disabled="store.teamCount===0" @click="clearTeam" variant="text">Vaciar</v-btn>
+      </v-card-title>
+      <v-divider />
+      <v-card-text>
+        <v-row class="align-center">
+          <v-col cols="12" md="4">
+            <v-text-field v-model="addInput" label="Nombre o ID" density="compact" variant="outlined" @keyup.enter="handleAdd" />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-btn color="primary" :disabled="!addInput || store.teamCount>=6" @click="handleAdd">Agregar</v-btn>
+          </v-col>
+          <v-col cols="12" md="6">
+            <div class="text-caption">Cobertura de Tipos:</div>
+            <div class="d-flex flex-wrap">
+              <v-chip
+                v-for="(count, type) in coverage"
+                :key="type"
+                :color="store.typeColors[type]"
+                class="ma-1"
+                size="x-small"
+                variant="elevated"
+                style="text-transform:capitalize"
+              >{{ type }} ({{ count }})</v-chip>
+              <span v-if="Object.keys(coverage).length===0" class="text-disabled">Sin tipos todavía</span>
+            </div>
+          </v-col>
+        </v-row>
+        <v-divider class="my-4" />
+        <v-row>
+          <v-col 
+            v-for="(p, idx) in store.teamData" 
+            :key="p.id" 
+            cols="12" 
+            sm="6" 
+            md="4"
+            draggable="true"
+            @dragstart="onDragStart(idx)"
+            @dragover.prevent
+            @drop="onDrop(idx)"
+          >
+            <v-card rounded="xl" variant="outlined" class="team-member-card">
+              <v-card-title class="d-flex align-center">
+                <v-avatar size="56" class="me-2">
+                  <img :src="p.sprites?.other?.['official-artwork']?.front_default || p.sprites?.front_default" :alt="p.name" />
+                </v-avatar>
+                <div>
+                  <div class="text-subtitle-2" style="text-transform:capitalize">#{{ p.id }} {{ p.name }}</div>
+                  <div>
+                    <v-chip v-for="t in p.types" :key="t" size="x-small" class="me-1" :color="store.typeColors[t]" style="text-transform:capitalize" />
+                  </div>
+                </div>
+                <v-spacer />
+                <v-btn icon="mdi-close" size="x-small" variant="text" @click="remove(p.id)" />
+              </v-card-title>
+            </v-card>
+          </v-col>
+          <v-col v-if="store.teamCount===0" cols="12">
+            <v-alert type="info" variant="tonal" title="Equipo vacío" text="Agrega Pokémon para ver la cobertura de tipos." />
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+  </v-container>
+=======
   <v-app class="pixel-font">
     <v-app-bar class="gba-app-bar" flat>
       <v-toolbar-title class="d-flex align-center gba-title">
@@ -80,6 +151,7 @@
       </v-container>
     </v-main>
   </v-app>
+>>>>>>> b3fc6f7 (init: proyecto limpio para deploy)
 </template>
 <script>
 import { onMounted, computed, ref } from 'vue'
@@ -134,6 +206,8 @@ export default {
 </script>
 
 <style scoped>
+<<<<<<< HEAD
+=======
 .pixel-font, .gba-title-text, .gba-title-pixel, .v-btn, .v-card-title, .v-card-text, .v-chip, .v-toolbar-title, .text-caption, .text-subtitle-1, .text-subtitle-2, .text-h5, .text-h6, .text-h4, .text-h3, .text-h2, .text-h1 {
   font-family: 'Press Start 2P', monospace !important;
   letter-spacing: 0.5px;
@@ -151,6 +225,7 @@ body::before, .v-application::before {
   background: repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 8px);
   z-index: 0;
 }
+>>>>>>> b3fc6f7 (init: proyecto limpio para deploy)
 .team-member-card {
   cursor: grab;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
