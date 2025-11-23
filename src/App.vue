@@ -1,8 +1,12 @@
+
   <template>
+    <router-view />
   </template>
 
   <script>
-  export default {}
+  export default {
+    name: 'App'
+  }
   </script>
 
 <style scoped>
