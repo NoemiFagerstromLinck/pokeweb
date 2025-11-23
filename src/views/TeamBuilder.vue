@@ -81,7 +81,6 @@
     </v-main>
   </v-app>
 </template>
-</template>
 <script>
 import { onMounted, computed, ref } from 'vue'
 import { usePokemonStore } from '../store/pokemon'
@@ -134,6 +133,7 @@ export default {
 }
 </script>
 
+<style scoped>
 .pixel-font, .gba-title-text, .gba-title-pixel, .v-btn, .v-card-title, .v-card-text, .v-chip, .v-toolbar-title, .text-caption, .text-subtitle-1, .text-subtitle-2, .text-h5, .text-h6, .text-h4, .text-h3, .text-h2, .text-h1 {
   font-family: 'Press Start 2P', monospace !important;
   letter-spacing: 0.5px;
