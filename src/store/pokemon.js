@@ -150,7 +150,6 @@ export const usePokemonStore = defineStore('pokemon', {
     },
     async loadTeam() {
       const missing = this.team.filter(id => !this.teamData.find(p => p.id === id))
-      const missing = this.team.filter(id => !this.teamData.find(p => p.id === id))
       await Promise.all(missing.map(id => this.loadTeamMember(id)))
     }
   }
