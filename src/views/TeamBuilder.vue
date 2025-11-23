@@ -58,7 +58,7 @@
                 <v-card rounded="xl" variant="outlined" class="team-member-card">
                   <v-card-title class="d-flex align-center">
                     <v-avatar size="56" class="me-2">
-                      <img :src="`/images/pokemon-${p.id}.png`" :alt="p.name" />
+                      <img :src="`${baseUrl}images/pokemon-${p.id}.png`" :alt="p.name" />
                     </v-avatar>
                     <div>
                       <div class="text-subtitle-2" style="text-transform:capitalize">#{{ p.id }} {{ p.name }}</div>
@@ -92,6 +92,7 @@ export default {
     const addInput = ref('')
     const coverage = computed(() => store.teamCoverage)
     const draggedIndex = ref(null)
+    const baseUrl = import.meta.env.BASE_URL
 
     async function handleAdd() {
       const raw = addInput.value.trim().toLowerCase()
